@@ -5,7 +5,7 @@ import sys
 
 
 if len(sys.argv) == 2:
-    files = [f]
+    files = [sys.argv[1]]
 if len(sys.argv) > 2:
     files = sys.argv[1:]
 
