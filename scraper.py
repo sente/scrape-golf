@@ -1,39 +1,35 @@
 import glob
 import lxml.html
+import requests
 import sys
 
-#thefile = 'Foley+AL'
+
+if len(sys.argv) == 2:
+    files = [f]
+if len(sys.argv) > 2:
+    files = sys.argv[1:]
 
 
 
-#time.sleep(1)
-
-#print root
-
-files = glob.glob('*+*')
-print files
 
 
 cities ={}
 for thefile in files:
 
-    #print thefile
-    #print len(cities)
+    if thefile.startswith('http'):
+        htmltext = requests.get(thefile).content
+    else:
+        htmltext = open(thefile,'r').read()
 
-    htmltext = open(thefile,'r').read()
     root = lxml.html.fromstring(htmltext)
 
     for alink in root.xpath('//a'):
         if 'course.aspx?course=' in alink.get('href',''):
             p = alink.getparent().getparent()
             course_html = lxml.html.tostring(p)
-            courseno= alink.get('href').split('=')[1]
-            #print courseno
-            #open('courses/%s.html' %courseno,'w').write(course_html)
+            courseno = alink.get('href').split('=')[1]
             cities[courseno] = course_html
 
-#    if len(cities) > 10000:
-#        break
 
 for k,v in cities.items():
     open('courses/%s.html' %k,'w').write(v)
