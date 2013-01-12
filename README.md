@@ -13,6 +13,6 @@ bash get_city_links.sh
 
 cat cities/*.links | 
     while read line; 
-        do python scraper.py $line; 
+        do python scraper.py "$line"; 
     done
 ```
